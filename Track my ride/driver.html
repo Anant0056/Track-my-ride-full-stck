@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Driver - Live Tracking</title>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js"></script>
+</head>
+<body>
+
+<h2>🚗 Driver Mode - Live Tracking ON</h2>
+<p id="status">Starting...</p>
+
+<script>
+  // 🔥 REPLACE WITH YOUR CONFIG
+  const firebaseConfig = {
+     apiKey: "AIzaSyDMIKFrs097bUb7h0bh9Oim1eT-Ih6EEeU",
+    authDomain: "track-my-ride-953ea.firebaseapp.com",
+    databaseURL: "https://track-my-ride-953ea-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "track-my-ride-953ea",
+    storageBucket: "track-my-ride-953ea.firebasestorage.app",
+    messagingSenderId: "112265337540",
+    appId: "1:112265337540:web:20a98ca087a97a2c7f0791",
+    measurementId: "G-V183L00NBM"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+
+  const status = document.getElementById("status");
+
+  // 📡 Start tracking
+  navigator.geolocation.watchPosition(
+    (pos) => {
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+
+      status.innerText = "Sending: " + lat + ", " + lng;
+
+      firebase.database().ref("location").set({
+        lat: lat,
+        lng: lng,
+        time: Date.now()
+      });
+    },
+    (err) => {
+      status.innerText = "Error: " + err.message;
+    },
+    { enableHighAccuracy: true }
+  );
+</script>
+
+</body>
+</html>
